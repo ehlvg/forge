@@ -1,0 +1,27 @@
+# LabFlow Configuration
+# Global config: ~/.labflow.yaml (student + university, shared across all labs)
+# Project config: ./labflow.yaml (inherits global, adds subject + lab details)
+
+student:
+  name: "Иванов Иван Иванович"
+  name_short: "И.И. Иванов"   # инициалы + фамилия (для титульной страницы)
+  group: "ИУ7-43Б"
+
+university:
+  name: "МГТУ им. Н.Э. Баумана"
+  short: "МГТУ"
+  department: "Кафедра № "     # факультет/кафедра
+  city: "Москва"
+
+subject:
+  name: "Теория вероятностей"
+  teacher: "Петров П.П."
+  teacher_position: ""         # должность, уч. степень, звание (опционально)
+
+lab:
+  number: 1
+  title: ""           # auto-filled from guide PDF
+  variant: 0           # 0 = not applicable
+  type: "math"         # math | code | mixed
+  language: "russian"  # report language
+  code_language: ""    # c++, python, etc. (auto-detected or from guide)

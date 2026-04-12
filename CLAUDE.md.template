@@ -1,0 +1,28 @@
+# LabFlow Project
+
+This is an automated lab assignment project managed by LabFlow.
+
+## Configuration
+All project metadata is stored in `labflow.yaml`. Agents read it automatically.
+
+## Structure
+- `labflow.yaml` — project config (student, university, subject, lab details)
+- `TASK.md` — extracted requirements from the guide PDF (created by planner)
+- `src/` — source code (if applicable)
+- `notebooks/` — Jupyter notebooks (if applicable)
+- `images/` — screenshots and figures
+- `docs/report.typ` — Typst report source
+- `docs/report.pdf` — compiled PDF report
+- `docs/template.typ` — Typst template (auto-generated)
+- `STUDY_MATERIAL.md` — study notes and Q&A (optional)
+
+## Commands
+- `/init` — initialize a new lab project (creates structure, config, template)
+- `/solve` — run full pipeline: parse guide → solve → write report → compile PDF
+- `/study` — generate study materials with theory and control questions
+
+## Rules
+- All text output (comments, reports, UI) must be in Russian unless specified otherwise.
+- Never modify `labflow.yaml` without explicit user request.
+- Always compile Typst to PDF and verify the output before finishing.
+- If any information is missing from config, check `~/.labflow.yaml` first, then ask the user.
