@@ -2,9 +2,9 @@
 
 # Forge Framework
 
-A fully autonomous university lab assignment solving and reviewing system powered by AI agents.
+A fully autonomous university assignment solving and reviewing system powered by AI agents.
 
-**2 actions** — and your lab is done: initialize the project + run the solver. Everything else is handled by the agents.
+**2 actions** — and your task is done: initialize the project + run the solver. Everything else is handled by the agents.
 
 ## Features
 
