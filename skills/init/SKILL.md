@@ -59,7 +59,7 @@ Create these directories and files:
 ```
 ./
 ├── forge.yaml
-├── CLAUDE.md
+├── AGENTS.md
 ├── src/
 ├── notebooks/
 ├── images/
@@ -67,7 +67,7 @@ Create these directories and files:
 │   ├── report.typ
 │   ├── template.typ
 │   └── titlepage.typ
-├── .claude/
+├── .opencode/
 │   ├── skills/
 │   │   ├── solve/SKILL.md
 │   │   ├── coder/SKILL.md
@@ -118,7 +118,8 @@ The template consists of TWO files: `docs/titlepage.typ` and `docs/template.typ`
 
 **Copy both from the Forge Framework installation** — look in these locations (in order):
 1. `../../templates/titlepage.typ` and `../../templates/template.typ` (relative to this skill file)
-2. `~/.claude/skills/forge/templates/titlepage.typ` and `template.typ`
+2. `~/.config/opencode/skills/forge/templates/titlepage.typ` and `template.typ`
+3. `~/.claude/skills/forge/templates/titlepage.typ` and `template.typ` (legacy Claude Code path)
 
 If not found, the template content is embedded below for reference — generate the files from it.
 
@@ -160,9 +161,9 @@ Then create `docs/report.typ`:
 
 **IMPORTANT:** The report uses `#show: init` (NOT `lab-report.with(...)`). All metadata is baked into `template.typ` from `forge.yaml`. The `ch(content)` function is available for centered unnumbered headings.
 
-## Step 6: Generate CLAUDE.md
+## Step 6: Generate AGENTS.md
 
-Create `CLAUDE.md` in the project root with:
+Create `AGENTS.md` in the project root with:
 - Project type and structure overview
 - Subject and lab context
 - Instructions for agents
@@ -172,7 +173,7 @@ Create `CLAUDE.md` in the project root with:
 
 ## Step 7: Copy Skills and Agents
 
-Read all skill files from the Forge Framework installation directory (the directory where THIS skill file is located). Copy the content of each skill into the project's `.claude/skills/` and `.claude/agents/` directories.
+Read all skill files from the Forge Framework installation directory (the directory where THIS skill file is located). Copy the content of each skill into the project's `.opencode/skills/` and `.opencode/agents/` directories.
 
 The source skills are siblings of this file's parent directory. Look for:
 - `../solve/SKILL.md`
@@ -185,6 +186,8 @@ The source skills are siblings of this file's parent directory. Look for:
 - `../../agents/solver.md`
 - `../../agents/writer.md`
 - `../../agents/reviewer.md`
+
+Copy into the project's `.opencode/skills/` and `.opencode/agents/` directories.
 
 If the source files are not found (e.g., installed differently), generate them inline using the specifications below. Each skill is self-contained and documented.
 

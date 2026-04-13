@@ -2,7 +2,7 @@
 
 This is an automated lab assignment project managed by Forge Framework.
 
-## Configuration
+## Project Context
 All project metadata is stored in `forge.yaml`. Agents read it automatically.
 
 ## Structure
@@ -16,7 +16,7 @@ All project metadata is stored in `forge.yaml`. Agents read it automatically.
 - `docs/template.typ` — Typst template (auto-generated)
 - `STUDY_MATERIAL.md` — study notes and Q&A (optional)
 
-## Commands
+## Available Commands
 - `/init` — initialize a new lab project (creates structure, config, template)
 - `/solve` — run full pipeline: parse guide → solve → write report → compile PDF
 - `/study` — generate study materials with theory and test questions
@@ -26,3 +26,6 @@ All project metadata is stored in `forge.yaml`. Agents read it automatically.
 - Never modify `forge.yaml` without explicit user request.
 - Always compile Typst to PDF and verify the output before finishing.
 - If any information is missing from config, check `~/.forge.yaml` first, then ask the user.
+- Report headings use `= Heading` / `== Subheading` syntax.
+- The `docs/template.typ` has a `ch()` function for centered unnumbered headings.
+- The report uses `#show: init` (NOT `lab-report.with(...)`).

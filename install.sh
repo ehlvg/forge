@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Forge Framework Installer
-# Installs Forge Framework skills and agents globally for Claude Code / OpenCode.
+# Installs Forge Framework skills and agents globally for OpenCode.
 #
 # Usage:
 #   curl -fsSL https://raw.githubusercontent.com/.../install.sh | bash
@@ -10,50 +10,50 @@
 set -euo pipefail
 
 FORGE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLAUDE_SKILLS_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
-CLAUDE_AGENTS_DIR="${CLAUDE_AGENTS_DIR:-$HOME/.claude/agents}"
+OPENCODE_SKILLS_DIR="${OPENCODE_SKILLS_DIR:-$HOME/.config/opencode/skills}"
+OPENCODE_AGENTS_DIR="${OPENCODE_AGENTS_DIR:-$HOME/.config/opencode/agents}"
 
 echo "Installing Forge Framework..."
 
 # --- Create directories ---
-mkdir -p "$CLAUDE_SKILLS_DIR/forge"
-mkdir -p "$CLAUDE_SKILLS_DIR/init"
-mkdir -p "$CLAUDE_SKILLS_DIR/solve"
-mkdir -p "$CLAUDE_SKILLS_DIR/coder"
-mkdir -p "$CLAUDE_SKILLS_DIR/math-solver"
-mkdir -p "$CLAUDE_SKILLS_DIR/report-writer"
-mkdir -p "$CLAUDE_SKILLS_DIR/report-reviewer"
-mkdir -p "$CLAUDE_SKILLS_DIR/study-gen"
-mkdir -p "$CLAUDE_AGENTS_DIR"
+mkdir -p "$OPENCODE_SKILLS_DIR/forge"
+mkdir -p "$OPENCODE_SKILLS_DIR/init"
+mkdir -p "$OPENCODE_SKILLS_DIR/solve"
+mkdir -p "$OPENCODE_SKILLS_DIR/coder"
+mkdir -p "$OPENCODE_SKILLS_DIR/math-solver"
+mkdir -p "$OPENCODE_SKILLS_DIR/report-writer"
+mkdir -p "$OPENCODE_SKILLS_DIR/report-reviewer"
+mkdir -p "$OPENCODE_SKILLS_DIR/study-gen"
+mkdir -p "$OPENCODE_AGENTS_DIR"
 
 # --- Copy global skill ---
-cp "$FORGE_DIR/SKILL.md" "$CLAUDE_SKILLS_DIR/forge/SKILL.md"
+cp "$FORGE_DIR/SKILL.md" "$OPENCODE_SKILLS_DIR/forge/SKILL.md"
 
 # --- Copy skills ---
-cp "$FORGE_DIR/skills/init/SKILL.md" "$CLAUDE_SKILLS_DIR/init/SKILL.md"
-cp "$FORGE_DIR/skills/solve/SKILL.md" "$CLAUDE_SKILLS_DIR/solve/SKILL.md"
-cp "$FORGE_DIR/skills/coder/SKILL.md" "$CLAUDE_SKILLS_DIR/coder/SKILL.md"
-cp "$FORGE_DIR/skills/math/SKILL.md" "$CLAUDE_SKILLS_DIR/math-solver/SKILL.md"
-cp "$FORGE_DIR/skills/writer/SKILL.md" "$CLAUDE_SKILLS_DIR/report-writer/SKILL.md"
-cp "$FORGE_DIR/skills/reviewer/SKILL.md" "$CLAUDE_SKILLS_DIR/report-reviewer/SKILL.md"
-cp "$FORGE_DIR/skills/study/SKILL.md" "$CLAUDE_SKILLS_DIR/study-gen/SKILL.md"
+cp "$FORGE_DIR/skills/init/SKILL.md" "$OPENCODE_SKILLS_DIR/init/SKILL.md"
+cp "$FORGE_DIR/skills/solve/SKILL.md" "$OPENCODE_SKILLS_DIR/solve/SKILL.md"
+cp "$FORGE_DIR/skills/coder/SKILL.md" "$OPENCODE_SKILLS_DIR/coder/SKILL.md"
+cp "$FORGE_DIR/skills/math/SKILL.md" "$OPENCODE_SKILLS_DIR/math-solver/SKILL.md"
+cp "$FORGE_DIR/skills/writer/SKILL.md" "$OPENCODE_SKILLS_DIR/report-writer/SKILL.md"
+cp "$FORGE_DIR/skills/reviewer/SKILL.md" "$OPENCODE_SKILLS_DIR/report-reviewer/SKILL.md"
+cp "$FORGE_DIR/skills/study/SKILL.md" "$OPENCODE_SKILLS_DIR/study-gen/SKILL.md"
 
 # --- Copy agents ---
-cp "$FORGE_DIR/agents/planner.md" "$CLAUDE_AGENTS_DIR/planner.md"
-cp "$FORGE_DIR/agents/solver.md" "$CLAUDE_AGENTS_DIR/solver.md"
-cp "$FORGE_DIR/agents/writer.md" "$CLAUDE_AGENTS_DIR/writer.md"
-cp "$FORGE_DIR/agents/reviewer.md" "$CLAUDE_AGENTS_DIR/reviewer.md"
+cp "$FORGE_DIR/agents/planner.md" "$OPENCODE_AGENTS_DIR/planner.md"
+cp "$FORGE_DIR/agents/solver.md" "$OPENCODE_AGENTS_DIR/solver.md"
+cp "$FORGE_DIR/agents/writer.md" "$OPENCODE_AGENTS_DIR/writer.md"
+cp "$FORGE_DIR/agents/reviewer.md" "$OPENCODE_AGENTS_DIR/reviewer.md"
 
 # --- Copy template ---
-mkdir -p "$CLAUDE_SKILLS_DIR/forge/templates"
-cp "$FORGE_DIR/templates/template.typ" "$CLAUDE_SKILLS_DIR/forge/templates/template.typ"
-cp "$FORGE_DIR/templates/titlepage.typ" "$CLAUDE_SKILLS_DIR/forge/templates/titlepage.typ"
+mkdir -p "$OPENCODE_SKILLS_DIR/forge/templates"
+cp "$FORGE_DIR/templates/template.typ" "$OPENCODE_SKILLS_DIR/forge/templates/template.typ"
+cp "$FORGE_DIR/templates/titlepage.typ" "$OPENCODE_SKILLS_DIR/forge/templates/titlepage.typ"
 
-# --- Copy CLAUDE.md template ---
-cp "$FORGE_DIR/CLAUDE.md.template" "$CLAUDE_SKILLS_DIR/forge/CLAUDE.md.template"
+# --- Copy AGENTS.md template ---
+cp "$FORGE_DIR/AGENTS.md.template" "$OPENCODE_SKILLS_DIR/forge/AGENTS.md.template"
 
 # --- Copy config example ---
-cp "$FORGE_DIR/config.example.yaml" "$CLAUDE_SKILLS_DIR/forge/config.example.yaml"
+cp "$FORGE_DIR/config.example.yaml" "$OPENCODE_SKILLS_DIR/forge/config.example.yaml"
 
 # --- Install Typst if missing ---
 if ! command -v typst &> /dev/null; then
@@ -134,7 +134,7 @@ echo "  /study  — Generate study materials"
 echo ""
 echo "Quick start:"
 echo "  mkdir lab1 && cd lab1"
-echo "  claude"
+echo "  opencode"
 echo "  > /init"
 echo "  > /solve guide.pdf"
 echo ""

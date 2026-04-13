@@ -34,7 +34,7 @@ The script:
 ```bash
 # 1. Create and initialize a project
 mkdir lab3-probability && cd lab3-probability
-claude    # or opencode
+opencode
 > /init
 
 # 2. Drop in the guide PDF and run
@@ -65,7 +65,7 @@ This data is saved to `~/.forge.yaml` and won't be asked again.
 ```
 lab3-probability/
 ├── forge.yaml             ← project configuration
-├── CLAUDE.md             ← agent context
+├── AGENTS.md             ← agent context
 ├── TASK.md               ← requirements (created by /solve)
 ├── src/                  ← source code
 ├── notebooks/            ← Jupyter notebooks (if needed)
@@ -76,7 +76,7 @@ lab3-probability/
 │   ├── report.typ        ← report (filled by agent)
 │   └── report.pdf        ← final PDF
 ├── STUDY_MATERIAL.md     ← study materials (optional)
-└── .claude/
+└── .opencode/
     ├── skills/           ← skills (copied during init)
     └── agents/           ← subagents
 ```
