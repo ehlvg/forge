@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+FORGE_SHARE_DIR="${FORGE_SHARE_DIR:-__FORGE_SHARE_DIR__}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ ! -d "$FORGE_SHARE_DIR" ]; then
+  FORGE_SHARE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+fi
+
+usage() {
+  cat <<'EOF'
+Forge CLI
+
+Usage:
+  forge init [path]
+  forge sync [path]
+  forge help
+
+Commands:
+  init   Open OpenCode in the target directory with `/init` preloaded.
+  sync   Refresh Forge-managed files in an existing project.
+         Updates docs/template.typ, docs/titlepage.typ, and reference templates.
+  help   Show this help.
+
+Examples:
+  forge init
+  forge init ~/labs/lab3
+  forge sync ~/labs/lab3
+
+After `forge init`:
+  1. Complete the Forge `/init` flow in OpenCode.
+  2. Add guide.pdf to the project directory.
+  3. Run /solve guide.pdf.
+
+EOF
+}
+
+die() {
+  printf 'forge: %s\n' "$1" >&2
+  exit 1
+}
+
+target_dir() {
+  local path="${1:-.}"
+
+  if [ -d "$path" ]; then
+    (cd "$path" && pwd)
+  else
+    mkdir -p "$path"
+    (cd "$path" && pwd)
+  fi
+}
+
+require_file() {
+  local file="$1"
+
+  [ -e "$file" ] || die "required Forge resource not found: $file"
+}
+
+copy_file() {
+  local src="$1"
+  local dst="$2"
+
+  require_file "$src"
+  mkdir -p "$(dirname "$dst")"
+  cp "$src" "$dst"
+}
+
+init_project() {
+  local dst_root
+
+  dst_root="$(target_dir "${1:-.}")"
+
+  command -v opencode > /dev/null 2>&1 || die "opencode is required for 'forge init'"
+
+  printf 'Launching OpenCode in: %s\n' "$dst_root"
+  printf 'Forge will start with `/init` preloaded.\n'
+
+  exec opencode "$dst_root" --prompt "/init"
+}
+
+sync_project() {
+  local dst_root
+
+  dst_root="$(target_dir "${1:-.}")"
+  mkdir -p "$dst_root/docs"
+
+  copy_file "$FORGE_SHARE_DIR/templates/template.typ" "$dst_root/docs/template.typ"
+  copy_file "$FORGE_SHARE_DIR/templates/titlepage.typ" "$dst_root/docs/titlepage.typ"
+  copy_file "$FORGE_SHARE_DIR/AGENTS.md.template" "$dst_root/.forge.AGENTS.md.template"
+  copy_file "$FORGE_SHARE_DIR/config.example.yaml" "$dst_root/.forge.config.example.yaml"
+
+  cat <<EOF
+Forge-managed files refreshed in: $dst_root
+
+Updated:
+  - docs/template.typ
+  - docs/titlepage.typ
+  - .forge.AGENTS.md.template
+  - .forge.config.example.yaml
+EOF
+}
+
+main() {
+  local command="${1:-help}"
+
+  case "$command" in
+    init)
+      shift || true
+      if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+        usage
+        return
+      fi
+      init_project "${1:-.}"
+      ;;
+    sync)
+      shift || true
+      if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+        usage
+        return
+      fi
+      sync_project "${1:-.}"
+      ;;
+    help|--help|-h)
+      usage
+      ;;
+    *)
+      die "unknown command: $command"
+      ;;
+  esac
+}
+
+main "$@"

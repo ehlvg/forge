@@ -84,7 +84,7 @@ Read `TASK.md` and check that `report.typ` contains:
 3. **Images/figures** (if screenshots were required) — at least one `image(...)` call.
 4. **Math formulas** (if type is math/mixed) — at least one `$ ... $` block.
 5. **Conclusion** — the final section must exist and have real content (not placeholder).
-6. **Title page data** — the `lab-report.with(...)` call must have all fields filled.
+6. **Title page data** — `docs/report.typ` must use `#show: init`, and `docs/template.typ` must not contain unresolved placeholders such as `__TITLE__`.
 
 If anything is missing, fix `report.typ` and re-compile.
 

@@ -1,6 +1,6 @@
 # Forge Framework Project
 
-This is an automated lab assignment project managed by Forge Framework.
+This is an automated lab assignment project managed by Forge Framework inside OpenCode.
 
 ## Project Context
 All project metadata is stored in `forge.yaml`. Agents read it automatically.

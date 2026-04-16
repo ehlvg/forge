@@ -15,14 +15,14 @@ Forge Framework is a fully autonomous system for completing university lab assig
 
 ## Architecture
 
-Forge Framework uses a pipeline of specialized skills and subagents:
+Forge Framework uses a pipeline of specialized skills, OpenCode commands, and subagents:
 
 1. **Planner** (subagent) — parses guide PDF, extracts requirements into TASK.md
 2. **Solver** (subagent) — implements the solution (code/math)
 3. **Writer** (subagent) — composes the Typst report
 4. **Reviewer** (subagent) — compiles to PDF, verifies, fixes errors
 
-When subagents are not available (e.g., in OpenCode), the orchestrator skill runs all phases sequentially.
+In OpenCode, `/solve` can invoke these subagents directly. In environments without subagent support, the orchestrator can run all phases sequentially.
 
 ## Configuration
 

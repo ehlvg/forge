@@ -6,7 +6,7 @@ argument-hint: "[subject] [lab_number]"
 
 # Init — Forge Framework Project Initializer
 
-You are setting up a new lab assignment project. Your goal is to create everything the student needs so that `/solve` can run fully autonomously afterward.
+You are setting up a new lab assignment project. Your goal is to create everything the student needs so that the Forge `/solve` command can run fully autonomously afterward.
 
 ## Step 1: Gather Configuration
 
@@ -67,19 +67,6 @@ Create these directories and files:
 │   ├── report.typ
 │   ├── template.typ
 │   └── titlepage.typ
-├── .opencode/
-│   ├── skills/
-│   │   ├── solve/SKILL.md
-│   │   ├── coder/SKILL.md
-│   │   ├── math/SKILL.md
-│   │   ├── writer/SKILL.md
-│   │   ├── reviewer/SKILL.md
-│   │   └── study/SKILL.md
-│   └── agents/
-│       ├── planner.md
-│       ├── solver.md
-│       ├── writer.md
-│       └── reviewer.md
 └── .gitignore
 ```
 
@@ -119,7 +106,7 @@ The template consists of TWO files: `docs/titlepage.typ` and `docs/template.typ`
 **Copy both from the Forge Framework installation** — look in these locations (in order):
 1. `../../templates/titlepage.typ` and `../../templates/template.typ` (relative to this skill file)
 2. `~/.config/opencode/skills/forge/templates/titlepage.typ` and `template.typ`
-3. `~/.claude/skills/forge/templates/titlepage.typ` and `template.typ` (legacy Claude Code path)
+3. `~/.claude/skills/forge/templates/titlepage.typ` and `template.typ` (legacy fallback only)
 
 If not found, the template content is embedded below for reference — generate the files from it.
 
@@ -166,32 +153,14 @@ Then create `docs/report.typ`:
 Create `AGENTS.md` in the project root with:
 - Project type and structure overview
 - Subject and lab context
-- Instructions for agents
-- Available commands (/solve, /study)
+- Instructions for OpenCode agents
+- Available OpenCode commands (/solve, /study) from the global Forge installation
 - Note that `docs/report.typ` uses `#show: init` and headings use `= Heading` / `== Subheading` syntax
 - Note that `docs/template.typ` has the `ch()` function for centered unnumbered headings
 
-## Step 7: Copy Skills and Agents
+Do not copy Forge skills or agents into the project. Use the global OpenCode installation managed by Forge.
 
-Read all skill files from the Forge Framework installation directory (the directory where THIS skill file is located). Copy the content of each skill into the project's `.opencode/skills/` and `.opencode/agents/` directories.
-
-The source skills are siblings of this file's parent directory. Look for:
-- `../solve/SKILL.md`
-- `../coder/SKILL.md`
-- `../math/SKILL.md`
-- `../writer/SKILL.md`
-- `../reviewer/SKILL.md`
-- `../study/SKILL.md`
-- `../../agents/planner.md`
-- `../../agents/solver.md`
-- `../../agents/writer.md`
-- `../../agents/reviewer.md`
-
-Copy into the project's `.opencode/skills/` and `.opencode/agents/` directories.
-
-If the source files are not found (e.g., installed differently), generate them inline using the specifications below. Each skill is self-contained and documented.
-
-## Step 8: Create .gitignore
+## Step 7: Create .gitignore
 
 ```
 docs/report.pdf
@@ -204,7 +173,7 @@ build/
 /tmp/
 ```
 
-## Step 9: Initialize Git
+## Step 8: Initialize Git
 
 ```bash
 git init
@@ -212,7 +181,7 @@ git add -A
 git commit -m "init: forge project for <subject> lab <N>"
 ```
 
-## Step 10: Final Summary
+## Step 9: Final Summary
 
 Print a summary:
 ```

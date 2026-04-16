@@ -51,7 +51,7 @@ Execute these phases in order. Each phase produces artifacts consumed by the nex
 
 **Goal:** Extract all requirements from the guide PDF into a structured `TASK.md`.
 
-**If subagents are available**, delegate to `@planner`.
+**If Forge OpenCode agents are installed**, delegate to `@planner`.
 **Otherwise**, do this yourself:
 
 1. Read the guide PDF thoroughly (use available PDF reading tools, `pdftotext`, or `python3` with `pymupdf`/`pdfplumber`).
@@ -107,7 +107,7 @@ Read `TASK.md` and `forge.yaml` to determine the lab type.
 
 #### If `type: code` or `type: mixed`:
 
-**If subagents are available**, delegate to `@solver`.
+**If Forge OpenCode agents are installed**, delegate to `@solver`.
 **Otherwise**, do this yourself following the coder skill rules:
 
 1. Read `TASK.md` for implementation requirements.
@@ -220,7 +220,7 @@ git add -A && git commit -m "forge: phase 2 — solution complete [solver]"
 
 **Goal:** Write the complete report in `docs/report.typ`.
 
-**If subagents are available**, delegate to `@writer`.
+**If Forge OpenCode agents are installed**, delegate to `@writer`.
 **Otherwise**, do this yourself following the writer skill rules:
 
 1. Read `TASK.md` for the required report structure.
@@ -229,7 +229,7 @@ git add -A && git commit -m "forge: phase 2 — solution complete [solver]"
 4. Write `docs/report.typ`:
 
 **Rules:**
-- Start with the `#import "template.typ": *` and `#show: lab-report.with(...)` block.
+- Start with the `#import "template.typ": *` and `#show: init` block.
 - Mirror the section structure from `TASK.md` exactly.
 - Write in coherent paragraphs, no bullet lists in body text.
 - No bold/italic in body text unless quoting variable names or terms.
@@ -276,7 +276,7 @@ git add -A && git commit -m "forge: phase 3 — report written [writer]"
 
 **Goal:** Compile the report to PDF and verify completeness.
 
-**If subagents are available**, delegate to `@reviewer`.
+**If Forge OpenCode agents are installed**, delegate to `@reviewer`.
 **Otherwise**, do this yourself:
 
 1. **Compile:**

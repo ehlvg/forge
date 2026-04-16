@@ -2,9 +2,9 @@
 
 # Forge Framework
 
-A fully autonomous university assignment solving and reviewing system powered by AI agents.
+A fully autonomous university assignment solving and reviewing system powered by OpenCode agents and commands.
 
-**2 actions** — and your task is done: initialize the project + run the solver. Everything else is handled by the agents.
+**2 actions** — run `forge init`, then run `/solve`. Everything else is handled by Forge's global OpenCode commands and agents.
 
 ## Features
 
@@ -24,20 +24,57 @@ cd forge
 ```
 
 The script:
-- Copies skills and subagents
+- Copies skills, custom commands, and subagents
+- Lets you choose OpenCode models for Forge agents during installation
+- Installs the global `forge` CLI
 - Installs Typst CLI (if not already installed)
 
+Forge installs custom `/init`, `/solve`, and `/study` commands for OpenCode. The Forge `/init` command intentionally overrides OpenCode's built-in `/init`.
+
+Model selection:
+- During `./install.sh`, you can set one model for all Forge agents or separate models for `planner`, `solver`, `writer`, and `reviewer`.
+- If `opencode` is installed, the installer can search through `opencode models`: type a search term, `?` to show all models, or a number to select from filtered results.
+- If you leave a model empty, that agent inherits the current OpenCode model.
+- For non-interactive install, use env vars: `FORGE_MODEL_ALL`, `FORGE_MODEL_PLANNER`, `FORGE_MODEL_SOLVER`, `FORGE_MODEL_WRITER`, `FORGE_MODEL_REVIEWER`.
+
+Example non-interactive install:
+
+```bash
+FORGE_MODEL_ALL=openai/gpt-5.1-codex ./install.sh
+```
+
+```bash
+FORGE_MODEL_PLANNER=anthropic/claude-sonnet-4-20250514 \
+FORGE_MODEL_SOLVER=openai/gpt-5.1-codex \
+FORGE_MODEL_WRITER=anthropic/claude-sonnet-4-20250514 \
+FORGE_MODEL_REVIEWER=openai/gpt-5.1-codex \
+./install.sh
+```
+
 ## Usage
+
+### CLI
+
+```bash
+forge init
+forge init ~/labs/lab3
+forge sync ~/labs/lab3
+```
+
+What it does:
+- `forge init [path]` opens OpenCode in the target folder with Forge `/init` preloaded.
+- `forge sync [path]` refreshes Forge-managed templates and reference files in an existing project without touching `forge.yaml` or `docs/report.typ`.
+
+`forge init` drops you straight into the Forge `/init` flow inside OpenCode.
 
 ### Each assignment — just 2 actions:
 
 ```bash
-# 1. Create and initialize a project
-mkdir lab3-probability && cd lab3-probability
-opencode
-> /init
+# 1. Create a project and complete Forge /init in OpenCode
+forge init lab3-probability
 
-# 2. Drop in the guide PDF and run
+# 2. Add the guide and run the solver
+cd lab3-probability
 cp ~/Downloads/guide.pdf ./guide.pdf
 > /solve guide.pdf
 
@@ -46,7 +83,7 @@ cp ~/Downloads/guide.pdf ./guide.pdf
 
 ### First Run
 
-On first `/init`, the system will ask for:
+During Forge `/init`, OpenCode asks for:
 - Full student name
 - Group
 - University and city
@@ -60,12 +97,12 @@ This data is saved to `~/.forge.yaml` and won't be asked again.
 # Creates STUDY_MATERIAL.md with theory and test questions
 ```
 
-## Project Structure (after /init)
+## Project Structure (after Forge `/init`)
 
 ```
 lab3-probability/
 ├── forge.yaml             ← project configuration
-├── AGENTS.md             ← agent context
+├── AGENTS.md             ← OpenCode project context
 ├── TASK.md               ← requirements (created by /solve)
 ├── src/                  ← source code
 ├── notebooks/            ← Jupyter notebooks (if needed)
@@ -73,12 +110,9 @@ lab3-probability/
 ├── docs/
 │   ├── template.typ      ← report template (GOST, with student data)
 │   ├── titlepage.typ     ← title page
-│   ├── report.typ        ← report (filled by agent)
+│   ├── report.typ        ← report (filled by writer agent)
 │   └── report.pdf        ← final PDF
-├── STUDY_MATERIAL.md     ← study materials (optional)
-└── .opencode/
-    ├── skills/           ← skills (copied during init)
-    └── agents/           ← subagents
+└── STUDY_MATERIAL.md     ← study materials (optional)
 ```
 
 ## The /solve Pipeline
