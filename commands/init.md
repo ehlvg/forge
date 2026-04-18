@@ -38,6 +38,7 @@ If subject/lab info is missing, ask the user:
 - Variant number (0 if not applicable)
 - Lab type: `math`, `code`, or `mixed`
 - Programming language (if code/mixed) — default C++23
+- Report language: `russian` or `english` — default `russian`
 
 ## Step 2: Install Typst (if needed)
 
@@ -86,15 +87,22 @@ lab:
   title: ""
   variant: <V>
   type: "<type>"
-  language: "russian"
+  language: "<russian|english>"
   code_language: "<lang>"
 ```
 
 When generating `name_short` from the full name: "Pankov Vasiliy Dmitrievich" → "V.D. Pankov".
 
+Supported `language` values: `russian` or `english`.
+
 ## Step 5: Set Up Typst Template
 
 Copy `docs/titlepage.typ` and `docs/template.typ` from the Forge installation.
+
+**Select the language-appropriate templates:**
+
+- If `language` is `russian`: copy `gost.typ.ru` → `docs/template.typ` and `titlepage.typ.ru` → `docs/titlepage.typ`
+- If `language` is `english`: copy `template.typ` → `docs/template.typ` and `titlepage.typ` → `docs/titlepage.typ`
 
 After copying, fill in the placeholders in `docs/template.typ` from `forge.yaml`.
 

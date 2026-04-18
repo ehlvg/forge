@@ -249,6 +249,8 @@ install_forge_cli() {
 
   copy_file "$FORGE_DIR/templates/template.typ" "$FORGE_SHARE_DIR/templates/template.typ"
   copy_file "$FORGE_DIR/templates/titlepage.typ" "$FORGE_SHARE_DIR/templates/titlepage.typ"
+  copy_file "$FORGE_DIR/templates/gost.typ.ru" "$FORGE_SHARE_DIR/templates/gost.typ.ru"
+  copy_file "$FORGE_DIR/templates/titlepage.typ.ru" "$FORGE_SHARE_DIR/templates/titlepage.typ.ru"
   copy_file "$FORGE_DIR/AGENTS.md.template" "$FORGE_SHARE_DIR/AGENTS.md.template"
   copy_file "$FORGE_DIR/config.example.yaml" "$FORGE_SHARE_DIR/config.example.yaml"
 
@@ -315,10 +317,12 @@ cp "$FORGE_DIR/commands/init.md" "$OPENCODE_COMMANDS_DIR/init.md"
 cp "$FORGE_DIR/commands/solve.md" "$OPENCODE_COMMANDS_DIR/solve.md"
 cp "$FORGE_DIR/commands/study.md" "$OPENCODE_COMMANDS_DIR/study.md"
 
-# --- Copy template ---
+# --- Copy templates ---
 mkdir -p "$OPENCODE_SKILLS_DIR/forge/templates"
 cp "$FORGE_DIR/templates/template.typ" "$OPENCODE_SKILLS_DIR/forge/templates/template.typ"
 cp "$FORGE_DIR/templates/titlepage.typ" "$OPENCODE_SKILLS_DIR/forge/templates/titlepage.typ"
+cp "$FORGE_DIR/templates/gost.typ.ru" "$OPENCODE_SKILLS_DIR/forge/templates/gost.typ.ru"
+cp "$FORGE_DIR/templates/titlepage.typ.ru" "$OPENCODE_SKILLS_DIR/forge/templates/titlepage.typ.ru"
 
 # --- Copy AGENTS.md template ---
 cp "$FORGE_DIR/AGENTS.md.template" "$OPENCODE_SKILLS_DIR/forge/AGENTS.md.template"

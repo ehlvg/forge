@@ -23,5 +23,5 @@ lab:
   title: ""           # auto-filled from guide PDF
   variant: 0           # 0 = not applicable
   type: "math"         # math | code | mixed
-  language: "russian"  # report language
+  language: "russian"  # report language: "russian" or "english"
   code_language: ""    # c++, python, etc. (auto-detected or from guide)

@@ -33,6 +33,7 @@ If subject/lab info is missing, ask the user:
 - Variant number (0 if not applicable)
 - Lab type: `math`, `code`, or `mixed`
 - Programming language (if code/mixed) — default C++23
+- Report language: `russian` or `english` — default `russian`
 
 ## Step 2: Install Typst (if needed)
 
@@ -93,20 +94,30 @@ lab:
   title: ""
   variant: <V>
   type: "<type>"
-  language: "russian"
+  language: "<russian|english>"
   code_language: "<lang>"
 ```
 
 When generating `name_short` from the full name: "Pankov Vasiliy Dmitrievich" → "V.D. Pankov".
 
+Supported `language` values: `russian` or `english`.
+
 ## Step 5: Set Up Typst Template
 
 The template consists of TWO files: `docs/titlepage.typ` and `docs/template.typ`.
 
+**Select the language-appropriate templates:**
+
+- If `language` is `russian`: use files `gost.typ.ru` and `titlepage.typ.ru` from the Forge installation
+- If `language` is `english`: use files `template.typ` and `titlepage.typ` from the Forge installation
+
 **Copy both from the Forge Framework installation** — look in these locations (in order):
-1. `../../templates/titlepage.typ` and `../../templates/template.typ` (relative to this skill file)
-2. `~/.config/opencode/skills/forge/templates/titlepage.typ` and `template.typ`
-3. `~/.claude/skills/forge/templates/titlepage.typ` and `template.typ` (legacy fallback only)
+1. `../../templates/<filename>` (relative to this skill file)
+2. `~/.config/opencode/skills/forge/templates/<filename>`
+3. `~/.claude/skills/forge/templates/<filename>` (legacy fallback only)
+
+For Russian, copy `gost.typ.ru` → `docs/template.typ` and `titlepage.typ.ru` → `docs/titlepage.typ`.
+For English, copy `template.typ` → `docs/template.typ` and `titlepage.typ` → `docs/titlepage.typ`.
 
 If not found, the template content is embedded below for reference — generate the files from it.
 
