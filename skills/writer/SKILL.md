@@ -152,28 +152,28 @@ If `src/formulas.typ` exists, you can include prepared formulas from there.
 If `src/tables.typ` exists, include the prepared tables.
 
 ### Conclusion
-The conclusion section must:
-- Summarize what was done in 2–3 sentences
-- State whether the objective was achieved
-- Mention key results or findings
-- Be written as a paragraph, not a list
+The conclusion section must be **2–5 sentences** and essentially restate the objective with a completion status. Do not write a lengthy summary — keep it short:
+- Restate the goal in slightly different wording
+- Confirm the objective was achieved
+- Briefly mention the key result (one sentence)
+- Written as a single paragraph, not a list
 
 ## Common section templates
 
 ### For code-type labs:
-1. Objective — one paragraph stating the goal
+1. Objective — 2–3 sentences stating the goal
 2. Theoretical Background — key concepts and methods (2–4 paragraphs)
 3. Task Execution — description of the solution approach
 4. Code Listing — code listings
 5. Results — screenshots of program output
-6. Conclusions — summary
+6. Conclusions — 2–5 sentences restating the objective with completion status
 
 ### For math-type labs:
-1. Objective
+1. Objective — 2–3 sentences
 2. Theoretical Background — formulas, methods
 3. Task Execution — step-by-step solution with formulas and calculations
 4. Results — tables with results, plots
-5. Conclusions
+5. Conclusions — 2–5 sentences restating the objective with completion status
 
 ## Verification before finishing
 
