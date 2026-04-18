@@ -29,3 +29,10 @@ All project metadata is stored in `forge.yaml`. Agents read it automatically.
 - Report headings use `= Heading` / `== Subheading` syntax.
 - The `docs/template.typ` has a `ch()` function for centered unnumbered headings.
 - The report uses `#show: init` (NOT `lab-report.with(...)`).
+
+## Sandbox runtime (Daytona)
+- Every build, run, `pip install`, `typst compile`, screenshot capture, etc. runs **inside a Daytona sandbox**, never on the host.
+- Use `forge exec -- <command>` for one-off commands and `forge shell` for an inline bash session. Project files are uploaded before each call and artifacts are downloaded back.
+- Required environment: `DAYTONA_API_KEY` in the shell or in a project-local `.env` (gitignored). Optionally `FORGE_DAYTONA_SNAPSHOT` / `FORGE_DAYTONA_IMAGE` for a custom image.
+- The sandbox auto-installs g++, cmake, python3, Typst and DejaVu fonts on first use; subsequent commands are fast.
+- Manage the sandbox with `forge status`, `forge stop`, `forge down`.

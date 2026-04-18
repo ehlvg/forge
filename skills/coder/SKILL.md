@@ -28,16 +28,16 @@ Implement programming tasks according to `TASK.md`. Produce clean, compilable, w
 - No decorative box-drawing characters in output.
 - Split into multiple files when it improves clarity.
 
-**Build:**
+**Build (always inside the sandbox):**
 ```bash
-mkdir -p build
-g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp
+forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp'
 ```
 
 **Qt projects:**
 - Use `.ui` files from Qt Designer unless forbidden.
 - Ensure `setupUi(this)` is called correctly.
-- Build with `qmake` or `cmake`.
+- Build with `qmake` or `cmake`, also via `forge exec --`.
+- Run headless: `forge exec -- bash -lc 'xvfb-run -a ./build/main'`.
 
 ### Python
 
@@ -45,7 +45,8 @@ g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp
 - Entry point: `src/main.py`.
 - Use type hints where reasonable.
 - Follow PEP 8.
-- Install dependencies: `pip install <pkg> --break-system-packages -q`.
+- Install dependencies inside the sandbox: `forge exec -- pip install <pkg> --break-system-packages -q`.
+- Run inside the sandbox: `forge exec -- python3 src/main.py`.
 
 ### Other languages
 
@@ -54,14 +55,13 @@ g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp
 
 ## Output capture
 
-After running the program, capture its output:
+After running the program, capture its output. Wrap the entire pipeline in a single sandbox invocation so the produced files end up on the host automatically:
 
 ```bash
-# Run and save output
+forge exec -- bash -lc '
 cd build && ./main > ../images/output.txt 2>&1
-
-# Convert text output to image
-python3 << 'PYEOF'
+cd ..
+python3 - <<PYEOF
 from PIL import Image, ImageDraw, ImageFont
 text = open("images/output.txt").read()
 lines = text.split("\n")
@@ -84,6 +84,7 @@ for line in lines:
 img.save("images/output.png")
 print("Screenshot saved")
 PYEOF
+'
 ```
 
 ## Delivery checklist

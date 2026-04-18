@@ -9,16 +9,14 @@ description: Compile Typst report to PDF and verify completeness. Fixes compilat
 
 You are the quality gate. Compile the Typst report to PDF, verify it's complete and correct, and fix any issues. You must not let a broken or incomplete report through.
 
-## Step 1: Ensure Typst is available
+## Step 1: Ensure the sandbox is reachable
 
 ```bash
-command -v typst || {
-  wget -qO /tmp/typst.tar.xz https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz
-  mkdir -p ~/.local/bin
-  tar xf /tmp/typst.tar.xz --strip-components=1 -C ~/.local/bin
-  export PATH="$HOME/.local/bin:$PATH"
-}
+forge status
+forge exec -- typst --version
 ```
+
+`DAYTONA_API_KEY` must be set (env or `.env`). The sandbox bootstrap installs Typst on first use; never install Typst on the host.
 
 ## Step 2: Verify file references
 
@@ -43,8 +41,10 @@ If files are missing:
 ## Step 3: Compile
 
 ```bash
-cd docs && typst compile report.typ report.pdf 2>&1
+forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf' 2>&1
 ```
+
+The compiled `docs/report.pdf` is synced back to the host on success.
 
 ## Step 4: Handle compilation errors
 

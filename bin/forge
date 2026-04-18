@@ -16,18 +16,40 @@ Forge CLI
 Usage:
   forge init [path]
   forge sync [path]
+  forge exec [-- ] <command...>
+  forge shell [script]
+  forge status | up | push | pull | stop | down
   forge help
 
 Commands:
-  init   Open OpenCode in the target directory with `/init` preloaded.
-  sync   Refresh Forge-managed files in an existing project.
-         Updates docs/template.typ, docs/titlepage.typ, and reference templates.
-  help   Show this help.
+  init     Open OpenCode in the target directory with `/init` preloaded.
+  sync     Refresh Forge-managed files in an existing project.
+           Updates docs/template.typ, docs/titlepage.typ, and reference templates.
+  exec     Run a shell command inside the project's Daytona sandbox.
+           Project files are uploaded before, artifacts downloaded after.
+  shell    Run an inline bash command inside the sandbox (default: `bash -l`).
+  status   Show the sandbox bound to the current project.
+  up       Ensure the sandbox exists, sync the project up.
+  push     Re-upload the project to the sandbox without running anything.
+  pull     Download sandbox artifacts back into the project.
+  stop     Stop the sandbox without deleting it.
+  down     Delete the sandbox bound to this project.
+  help     Show this help.
+
+Environment:
+  DAYTONA_API_KEY        Required for any sandbox command.
+  DAYTONA_API_URL        Optional Daytona endpoint override.
+  FORGE_DAYTONA_SNAPSHOT Optional snapshot name for sandbox creation.
+  FORGE_DAYTONA_IMAGE    Optional image override (when no snapshot is given).
+  FORGE_REMOTE_WORKDIR   Remote working directory (default: /home/daytona/work).
 
 Examples:
   forge init
   forge init ~/labs/lab3
   forge sync ~/labs/lab3
+  forge exec -- g++ -std=c++23 -o build/main src/*.cpp
+  forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf'
+  forge shell
 
 After `forge init`:
   1. Complete the Forge `/init` flow in OpenCode.
@@ -103,6 +125,27 @@ Updated:
 EOF
 }
 
+resolve_runtime_dir() {
+  if [ -d "$FORGE_SHARE_DIR/runtime" ] && [ -f "$FORGE_SHARE_DIR/runtime/pyproject.toml" ]; then
+    printf '%s' "$FORGE_SHARE_DIR/runtime"
+    return
+  fi
+  if [ -f "$FORGE_SHARE_DIR/pyproject.toml" ] && [ -d "$FORGE_SHARE_DIR/forge_runtime" ]; then
+    printf '%s' "$FORGE_SHARE_DIR"
+    return
+  fi
+  die "Forge runtime package not found under $FORGE_SHARE_DIR"
+}
+
+run_runtime() {
+  local runtime_dir
+  runtime_dir="$(resolve_runtime_dir)"
+
+  command -v uv > /dev/null 2>&1 || die "uv is required for sandbox commands. Install: https://docs.astral.sh/uv/"
+
+  exec uv run --quiet --project "$runtime_dir" forge-runtime "$@"
+}
+
 main() {
   local command="${1:-help}"
 
@@ -122,6 +165,22 @@ main() {
         return
       fi
       sync_project "${1:-.}"
+      ;;
+    exec)
+      shift || true
+      run_runtime exec "$@"
+      ;;
+    shell)
+      shift || true
+      run_runtime shell "$@"
+      ;;
+    status|up|push|pull|stop|down)
+      local sub="$command"
+      shift || true
+      case "$sub" in
+        push) run_runtime sync "$@" ;;
+        *)    run_runtime "$sub" "$@" ;;
+      esac
       ;;
     help|--help|-h)
       usage

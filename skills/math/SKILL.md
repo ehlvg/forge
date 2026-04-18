@@ -131,14 +131,19 @@ Cell types:
 
 Use as needed: `numpy`, `scipy`, `sympy`, `matplotlib`, `pandas`, `sklearn`.
 
-Install if missing:
+Install if missing — **inside the sandbox**:
 ```bash
-pip install numpy scipy sympy matplotlib pandas --break-system-packages -q
+forge exec -- pip install numpy scipy sympy matplotlib pandas --break-system-packages -q
+```
+
+Run scripts inside the sandbox so generated `images/*.png` and printed output flow back to the host:
+```bash
+forge exec -- python3 src/solve.py
 ```
 
 ## Delivery checklist
 
-- [ ] Solution script runs without errors: `python3 src/solve.py`
+- [ ] Solution script runs without errors: `forge exec -- python3 src/solve.py`
 - [ ] All plots saved to `images/`
 - [ ] Results printed to console (captured for report)
 - [ ] `src/formulas.typ` created with key formulas in Typst syntax

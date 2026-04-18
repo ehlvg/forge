@@ -18,7 +18,7 @@ You are the main orchestrator. Your job is to take a lab guide PDF and produce a
 Before starting, verify:
 1. `forge.yaml` exists — if not, tell the user to run `/init` first.
 2. The guide PDF is available — either passed as `$ARGUMENTS` or found in the project root.
-3. `typst` is installed.
+3. The Daytona sandbox runtime is reachable: `DAYTONA_API_KEY` is set (env or project `.env`) and `forge status` returns without error. **All builds, runs, `pip`, `typst`, etc. happen inside the sandbox via `forge exec --` — never on the host.**
 
 ## Pipeline
 
@@ -41,8 +41,9 @@ Goal: produce a working solution.
 Read `TASK.md` and `forge.yaml` to determine the lab type.
 
 If Forge OpenCode agents are installed, delegate to `@solver`. Otherwise do it yourself:
-- For `code` or `mixed`: implement the solution in `src/`, build it, run it, and capture output.
-- For `math` or `mixed`: create scripts or notebooks, compute results, and save plots to `images/`.
+- For `code` or `mixed`: implement the solution in `src/`, then build and run it inside the sandbox: `forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp'`, then `forge exec -- ./build/main`.
+- For `math` or `mixed`: create scripts or notebooks, then `forge exec -- python3 src/solve.py`. Save plots into `images/`.
+- Install missing Python packages with `forge exec -- pip install ... --break-system-packages -q`.
 - Prepare formulas and tables for the report if needed.
 
 ### Phase 3: WRITE
@@ -60,7 +61,7 @@ If Forge OpenCode agents are installed, delegate to `@writer`. Otherwise do it y
 Goal: compile and verify the report.
 
 If Forge OpenCode agents are installed, delegate to `@reviewer`. Otherwise do it yourself:
-- Compile `docs/report.typ` to `docs/report.pdf`.
+- Compile inside the sandbox: `forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf'`. The PDF is synced back to `docs/report.pdf` on the host.
 - Fix Typst errors and retry as needed.
 - Verify that all required sections, code listings, figures, and formulas are present.
 

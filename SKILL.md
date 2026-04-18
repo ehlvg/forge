@@ -29,6 +29,16 @@ In OpenCode, `/solve` can invoke these subagents directly. In environments witho
 - **Global config**: `~/.forge.yaml` — student and university data (set once)
 - **Project config**: `./forge.yaml` — subject and lab details (per project)
 
+## Sandbox runtime
+
+All compilation, execution, `pip`, screenshots and `typst compile` happen inside a Daytona sandbox bound to the project. The host only edits files. Set `DAYTONA_API_KEY` (env or project `.env`) and use:
+
+- `forge exec -- <command>` — run anything inside the sandbox; project files sync up before, artifacts sync back after.
+- `forge shell [script]` — inline bash session in the sandbox.
+- `forge status | up | push | pull | stop | down` — manage the sandbox lifecycle.
+
+Configure the image, snapshot and bootstrap script under `runtime.daytona.*` in `forge.yaml`. By default, the sandbox auto-installs g++, cmake, python3, Typst and DejaVu fonts on first use.
+
 ## Quick Start
 
 ```bash
