@@ -47,6 +47,12 @@ If subject/lab info is missing, ask the user:
 - Variant number (0 if not applicable)
 - Lab type: `math`, `code`, or `mixed`
 - Programming language (if code/mixed) — default C++23
+- Writing style: `formal`, `simple`, or `concise` — default `formal`
+
+Available writing styles:
+- `formal` — academic tone, passive voice, specialized terminology, complex sentence structures
+- `simple` — clear and straightforward, active voice, plain language, short sentences
+- `concise` — brief and to the point, minimal words, results-focused, no filler
 
 ## Step 2: Install Typst (if needed)
 
@@ -109,12 +115,14 @@ lab:
   variant: <V>
   type: "<type>"
   language: "<russian|english>"
+  style: "<formal|simple|concise>"
   code_language: "<lang>"
 ```
 
 When generating `name_short` from the full name: "Pankov Vasiliy Dmitrievich" → "V.D. Pankov".
 
 Supported `language` values: `russian` or `english`.
+Supported `style` values: `formal`, `simple`, or `concise`.
 
 ## Step 5: Set Up Typst Template
 

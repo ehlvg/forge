@@ -17,13 +17,20 @@ Write the complete lab report in `docs/report.typ`. The report must be:
 
 1. Read `TASK.md` — this is your structural guide. Mirror its sections exactly.
 2. Read `forge.yaml` — for metadata (student, subject, lab number, etc.).
-3. Read solution files:
+3. **Read the writing style file** — look for `forge.yaml` field `style` (e.g. `formal`, `simple`, `concise`). Then find and read the corresponding style guide. Look in these locations (in order):
+   - `.forge/styles/<style>.md` (project-local, for custom styles)
+   - `~/.config/opencode/skills/forge/styles/<style>.md`
+   - `../../styles/<style>.md` (relative to this skill file)
+   
+   If no `style` field is set, default to `formal`. Follow the style guide's instructions on tone, word choice, and sentence structure.
+
+4. Read solution files:
    - `src/` — source code files
    - `images/` — plots, screenshots
    - `src/formulas.typ` — prepared formulas (if exists)
    - `src/tables.typ` — prepared tables (if exists)
    - `notebooks/` — Jupyter notebooks (if any)
-4. Read `docs/template.typ` — understand the template API.
+5. Read `docs/template.typ` — understand the template API.
 
 ## Report structure
 

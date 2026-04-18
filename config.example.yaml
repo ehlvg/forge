@@ -44,4 +44,5 @@ lab:
   variant: 0           # 0 = not applicable
   type: "math"         # math | code | mixed
   language: "russian"  # report language: "russian" or "english"
+  style: "formal"      # writing style: "formal", "simple", or "concise"
   code_language: ""    # c++, python, etc. (auto-detected or from guide)

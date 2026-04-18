@@ -137,6 +137,12 @@ sync_project() {
   copy_file "$FORGE_SHARE_DIR/AGENTS.md.template" "$dst_root/.forge.AGENTS.md.template"
   copy_file "$FORGE_SHARE_DIR/config.example.yaml" "$dst_root/.forge.config.example.yaml"
 
+  # Copy writing styles
+  mkdir -p "$dst_root/.forge/styles"
+  for style_file in "$FORGE_SHARE_DIR/styles"/*.md; do
+    [ -f "$style_file" ] && cp "$style_file" "$dst_root/.forge/styles/"
+  done
+
   cat <<EOF
 Forge-managed files refreshed in: $dst_root
 
@@ -146,6 +152,7 @@ Updated:
   - docs/titlepage.typ
   - .forge.AGENTS.md.template
   - .forge.config.example.yaml
+  - .forge/styles/
 EOF
 }
 

@@ -13,8 +13,9 @@ You are a writer agent for lab reports. Your job is to compose a complete Typst 
 
 1. Read `TASK.md` for report structure.
 2. Read `forge.yaml` for metadata.
-3. Read solution files in `src/` and `images/`.
-4. Write `docs/report.typ` following the writer skill guidelines.
+3. Read the writing style guide: find the `style` field in `forge.yaml` (e.g. `formal`, `simple`, `concise`) and read the style file. Look in this order: `.forge/styles/<style>.md`, then `~/.config/opencode/skills/forge/styles/<style>.md`, then `../../styles/<style>.md`. Default to `formal` if not set. Follow its rules on tone, word choice, and sentence length.
+4. Read solution files in `src/` and `images/`.
+5. Write `docs/report.typ` following the writer skill guidelines.
 
 ## Key rules
 

@@ -228,7 +228,7 @@ install_forge_cli() {
   local tmp_cli
 
   mkdir -p "$FORGE_BIN_DIR" "$FORGE_SHARE_DIR"
-  mkdir -p "$FORGE_SHARE_DIR/commands" "$FORGE_SHARE_DIR/skills" "$FORGE_SHARE_DIR/agents" "$FORGE_SHARE_DIR/templates"
+  mkdir -p "$FORGE_SHARE_DIR/commands" "$FORGE_SHARE_DIR/skills" "$FORGE_SHARE_DIR/agents" "$FORGE_SHARE_DIR/templates" "$FORGE_SHARE_DIR/styles"
 
   copy_file "$FORGE_DIR/commands/init.md" "$FORGE_SHARE_DIR/commands/init.md"
   copy_file "$FORGE_DIR/commands/solve.md" "$FORGE_SHARE_DIR/commands/solve.md"
@@ -251,6 +251,9 @@ install_forge_cli() {
   copy_file "$FORGE_DIR/templates/titlepage.typ" "$FORGE_SHARE_DIR/templates/titlepage.typ"
   copy_file "$FORGE_DIR/templates/gost.typ.ru" "$FORGE_SHARE_DIR/templates/gost.typ.ru"
   copy_file "$FORGE_DIR/templates/titlepage.typ.ru" "$FORGE_SHARE_DIR/templates/titlepage.typ.ru"
+  copy_file "$FORGE_DIR/styles/formal.md" "$FORGE_SHARE_DIR/styles/formal.md"
+  copy_file "$FORGE_DIR/styles/simple.md" "$FORGE_SHARE_DIR/styles/simple.md"
+  copy_file "$FORGE_DIR/styles/concise.md" "$FORGE_SHARE_DIR/styles/concise.md"
   copy_file "$FORGE_DIR/AGENTS.md.template" "$FORGE_SHARE_DIR/AGENTS.md.template"
   copy_file "$FORGE_DIR/config.example.yaml" "$FORGE_SHARE_DIR/config.example.yaml"
 
@@ -326,6 +329,12 @@ cp "$FORGE_DIR/templates/titlepage.typ.ru" "$OPENCODE_SKILLS_DIR/forge/templates
 
 # --- Copy AGENTS.md template ---
 cp "$FORGE_DIR/AGENTS.md.template" "$OPENCODE_SKILLS_DIR/forge/AGENTS.md.template"
+
+# --- Copy styles ---
+mkdir -p "$OPENCODE_SKILLS_DIR/forge/styles"
+cp "$FORGE_DIR/styles/formal.md" "$OPENCODE_SKILLS_DIR/forge/styles/formal.md"
+cp "$FORGE_DIR/styles/simple.md" "$OPENCODE_SKILLS_DIR/forge/styles/simple.md"
+cp "$FORGE_DIR/styles/concise.md" "$OPENCODE_SKILLS_DIR/forge/styles/concise.md"
 
 # --- Copy config example ---
 cp "$FORGE_DIR/config.example.yaml" "$OPENCODE_SKILLS_DIR/forge/config.example.yaml"
