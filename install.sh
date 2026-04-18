@@ -224,6 +224,29 @@ set_agent_model() {
   mv "$tmp" "$file"
 }
 
+install_runtime_package() {
+  local runtime_dst="$FORGE_SHARE_DIR/runtime"
+
+  mkdir -p "$runtime_dst"
+  cp -R "$FORGE_DIR/forge_runtime" "$runtime_dst/forge_runtime"
+  cp "$FORGE_DIR/pyproject.toml" "$runtime_dst/pyproject.toml"
+  if [ -f "$FORGE_DIR/uv.lock" ]; then
+    cp "$FORGE_DIR/uv.lock" "$runtime_dst/uv.lock"
+  fi
+  if [ -f "$FORGE_DIR/main.py" ]; then
+    cp "$FORGE_DIR/main.py" "$runtime_dst/main.py"
+  fi
+  if [ -f "$FORGE_DIR/README.md" ]; then
+    cp "$FORGE_DIR/README.md" "$runtime_dst/README.md"
+  fi
+
+  if command -v uv > /dev/null 2>&1; then
+    (cd "$runtime_dst" && uv sync --quiet) || echo "  warning: 'uv sync' failed; run it manually in $runtime_dst"
+  else
+    echo "  warning: uv not found — install https://docs.astral.sh/uv/ to enable sandbox commands"
+  fi
+}
+
 install_forge_cli() {
   local tmp_cli
 
@@ -274,6 +297,7 @@ echo "Installing Forge Framework..."
 load_available_models
 configure_agent_models
 install_forge_cli
+install_runtime_package
 
 # --- Create directories ---
 mkdir -p "$OPENCODE_SKILLS_DIR/forge"
@@ -411,8 +435,14 @@ echo "  /study  — Generate study materials"
 echo "  Note: Forge overrides OpenCode's built-in /init command"
 echo ""
 echo "Forge CLI:"
-echo "  forge init [path] — open OpenCode with Forge /init in any folder"
-echo "  forge sync [path] — refresh Forge-managed files in a project"
+echo "  forge init [path]                — open OpenCode with Forge /init in any folder"
+echo "  forge sync [path]                — refresh Forge-managed templates in a project"
+echo "  forge exec -- <command...>       — run a command in the project's Daytona sandbox"
+echo "  forge shell [script]             — run an inline bash command in the sandbox"
+echo "  forge status | up | push | pull  — manage the project sandbox"
+echo "  forge stop | down                — stop or delete the sandbox"
+echo
+echo "Sandbox runtime requires DAYTONA_API_KEY in env or .env, and 'uv' in PATH."
 echo ""
 echo "Quick start:"
 echo "  forge init lab1"

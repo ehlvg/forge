@@ -25,3 +25,25 @@ lab:
   type: "math"         # math | code | mixed
   language: "russian"  # report language
   code_language: ""    # c++, python, etc. (auto-detected or from guide)
+
+# Sandbox runtime (Daytona). All compilation, execution, pip and Typst run here,
+# never on the host. The CLI binds one sandbox per project directory.
+runtime:
+  remote_workdir: "/home/daytona/work"
+  daytona:
+    # Pick one of: snapshot (preferred, fastest start) or image.
+    # Leave both empty to use the Daytona default base image — bootstrap below
+    # will install g++, cmake, python, Typst and DejaVu fonts on first start.
+    snapshot: ""        # e.g. "forge-lab-debian-bookworm"
+    image: ""           # e.g. "ubuntu:24.04"
+    api_key: ""         # leave empty to use DAYTONA_API_KEY from env / .env
+    api_url: ""         # leave empty to use DAYTONA_API_URL from env
+    target: ""          # leave empty to use DAYTONA_TARGET from env
+    public: false
+    auto_stop_minutes: 15      # idle timeout before sandbox auto-stops
+    auto_delete_minutes: null  # null = never auto-delete
+    env: {}             # extra env vars exposed to every command
+    # bootstrap: ""    # uncomment to override; "" skips bootstrap entirely.
+    #                  # default installs build-essential, g++, cmake, ninja,
+    #                  # python3+pip, fonts-dejavu, Typst (latest release)
+    #                  # once per sandbox; see forge_runtime/config.py.

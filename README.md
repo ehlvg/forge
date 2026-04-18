@@ -14,6 +14,7 @@ A fully autonomous university assignment solving and reviewing system powered by
 - **Typst Reports** — beautiful GOST-compliant PDF with title page
 - **Self-Verification** — compiles, checks, and fixes errors
 - **Study Materials** — theory + test questions with answers
+- **Sandboxed execution** — every compiler, interpreter and Typst run lives inside a Daytona sandbox; the host only edits files
 
 ## Installation
 
@@ -59,11 +60,48 @@ FORGE_MODEL_REVIEWER=openai/gpt-5.1-codex \
 forge init
 forge init ~/labs/lab3
 forge sync ~/labs/lab3
+
+forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -o build/main src/*.cpp'
+forge exec -- ./build/main
+forge exec -- python3 src/solve.py
+forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf'
+forge shell
+
+forge status   # show sandbox bound to the project
+forge stop     # stop the sandbox without deleting it
+forge down     # delete the sandbox
 ```
 
 What it does:
 - `forge init [path]` opens OpenCode in the target folder with Forge `/init` preloaded.
 - `forge sync [path]` refreshes Forge-managed templates and reference files in an existing project without touching `forge.yaml` or `docs/report.typ`.
+- `forge exec -- <command>` uploads the current project to a per-project Daytona sandbox, runs the command there, and downloads any new/changed files back. This is how every build, test, `pip install`, and `typst compile` is performed — the host stays clean.
+- `forge shell` runs an inline bash command (default `bash -l`) in the same sandbox.
+
+### Sandbox runtime (Daytona)
+
+Forge does not run compilers, interpreters or Typst on your machine. Instead it binds one Daytona sandbox per project (tracked in `.forge/sandbox.json`, gitignored) and routes all execution through it.
+
+Required:
+- `uv` on the host (used to launch the runtime).
+- `DAYTONA_API_KEY` — exported in your shell or stored in the project's `.env` (gitignored). Optionally `DAYTONA_API_URL`, `DAYTONA_TARGET`.
+
+Optional in `forge.yaml`:
+
+```yaml
+runtime:
+  remote_workdir: "/home/daytona/work"
+  daytona:
+    snapshot: ""              # preferred: pre-built snapshot id, fastest start
+    image: ""                 # alternative: container image, e.g. "ubuntu:24.04"
+    auto_stop_minutes: 15
+    auto_delete_minutes: null
+    env: {}
+    # bootstrap: ""           # custom bootstrap script; default installs
+    #                         # g++, cmake, python3, Typst and DejaVu fonts.
+```
+
+On first use the sandbox runs a bootstrap that installs the lab toolchain (g++, cmake, python3, Typst, fonts) and writes a marker so subsequent commands skip it. Override the toolset by pointing `snapshot` or `image` at your own pre-built environment.
 
 `forge init` drops you straight into the Forge `/init` flow inside OpenCode.
 

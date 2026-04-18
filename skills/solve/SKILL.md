@@ -13,12 +13,21 @@ You are the main orchestrator. Your job is to take a lab guide PDF and produce a
 Before starting, verify:
 1. `forge.yaml` exists — if not, tell the user to run `/init` first.
 2. The guide PDF is available — either passed as `$ARGUMENTS` or find any `.pdf` file in the project root.
-3. `typst` is installed — if not, install it:
-   ```bash
-   wget -qO /tmp/typst.tar.xz https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz
-   mkdir -p ~/.local/bin && tar xf /tmp/typst.tar.xz --strip-components=1 -C ~/.local/bin
-   export PATH="$HOME/.local/bin:$PATH"
-   ```
+3. The Daytona sandbox runtime is reachable: `DAYTONA_API_KEY` is set (env or `.env`) and `forge status` succeeds. Compilers and Typst live inside the sandbox; never install or invoke them on the host.
+
+## Sandbox contract
+
+Every command that builds, runs, installs packages, captures screenshots, or compiles Typst must be invoked through the runtime:
+
+```bash
+forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -o build/main src/*.cpp'
+forge exec -- ./build/main
+forge exec -- python3 src/solve.py
+forge exec -- pip install pillow matplotlib --break-system-packages -q
+forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf'
+```
+
+`forge exec` uploads project files before running and downloads any artifacts the command produced (binaries in `build/`, plots in `images/`, the compiled PDF in `docs/`) back to the host.
 
 ## Checkpoints (Version Snapshots)
 
@@ -117,9 +126,9 @@ Read `TASK.md` and `forge.yaml` to determine the lab type.
    - Python: modules in `.py`, entry point in `main.py`.
    - Other languages: follow standard conventions.
 4. Comments in the report language, minimal.
-5. Build and test:
-   - C++: `g++ -std=c++23 -o build/main src/*.cpp && ./build/main`
-   - Python: `python3 src/main.py`
+5. Build and test inside the sandbox:
+   - C++: `forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -o build/main src/*.cpp && ./build/main'`
+   - Python: `forge exec -- python3 src/main.py`
 6. Capture program output for the report.
 
 #### If `type: math` or `type: mixed`:
@@ -145,9 +154,8 @@ After running the solution, create screenshots of program output:
 
 **Strategy 1 — Terminal output capture (preferred for CLI programs):**
 ```bash
-# Run the program and capture output
+forge exec -- bash -lc '
 ./build/main > /tmp/output.txt 2>&1
-# Use Python to render text as an image
 python3 -c "
 import subprocess
 # Try to use a text-to-image approach
@@ -180,22 +188,22 @@ except ImportError:
     with open('images/output.txt', 'w') as f:
         f.write(text)
 "
+'
 ```
 
 **Strategy 2 — For graphical programs (Qt, etc.):**
 ```bash
-# Install virtual framebuffer if needed
-which Xvfb || sudo apt-get install -y xvfb
-# Run with virtual display and take screenshot
+forge exec -- bash -lc '
+which Xvfb || (sudo apt-get update -y && sudo apt-get install -y xvfb imagemagick)
 Xvfb :99 -screen 0 1024x768x24 &
 export DISPLAY=:99
 sleep 1
 ./build/main &
 APP_PID=$!
 sleep 3
-# Use import (ImageMagick) or scrot
 import -window root images/screenshot.png || scrot images/screenshot.png
 kill $APP_PID
+'
 ```
 
 **Strategy 3 — For matplotlib/plots (already handled above):**
@@ -204,9 +212,9 @@ Plots are saved directly as images.
 **Strategy 4 — Fallback:**
 If no screenshot tool works, include program output as a code block in the report and note that screenshots could not be captured automatically.
 
-Install dependencies as needed:
+Install dependencies as needed (inside the sandbox):
 ```bash
-pip install pillow matplotlib numpy scipy sympy pandas --break-system-packages -q 2>/dev/null
+forge exec -- pip install pillow matplotlib numpy scipy sympy pandas --break-system-packages -q
 ```
 
 **Checkpoint:**
@@ -279,9 +287,9 @@ git add -A && git commit -m "forge: phase 3 — report written [writer]"
 **If Forge OpenCode agents are installed**, delegate to `@reviewer`.
 **Otherwise**, do this yourself:
 
-1. **Compile:**
+1. **Compile (inside the sandbox):**
    ```bash
-   cd docs && typst compile report.typ report.pdf 2>&1
+   forge exec -- bash -lc 'cd docs && typst compile report.typ report.pdf' 2>&1
    ```
 
 2. **If compilation fails:**
@@ -336,8 +344,9 @@ git add -A && git commit -m "forge: phase 3 — report written [writer]"
 
 ## Error Recovery
 
-- If `pdftotext` is not available: `pip install pymupdf --break-system-packages -q && python3 -c "import fitz; doc=fitz.open('guide.pdf'); [print(p.get_text()) for p in doc]"`
-- If `g++` is not available: `sudo apt-get install -y g++` or use the available compiler.
-- If Python packages are missing: `pip install <package> --break-system-packages -q`
-- If fonts are missing for Typst: the template should use built-in fonts or download them.
-- If the guide PDF is scanned (no text): use OCR with `pip install pytesseract --break-system-packages -q` and `tesseract`.
+All recovery commands also run via `forge exec --`:
+
+- Missing `pdftotext`: `forge exec -- pip install pymupdf --break-system-packages -q` and parse with `python3 -c "import fitz; ..."`. Reading the PDF on the host is also fine for the planner.
+- Missing toolchain: re-run the bootstrap by deleting the marker — `forge exec -- bash -lc 'rm -f $WORK/.forge-bootstrapped'`, then any subsequent `forge exec` will reinstall.
+- Missing Python packages: `forge exec -- pip install <package> --break-system-packages -q`.
+- Scanned guide PDF: `forge exec -- pip install pytesseract --break-system-packages -q` and `forge exec -- tesseract ...`.

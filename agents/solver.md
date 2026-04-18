@@ -26,6 +26,19 @@ You are a solver agent for lab assignments. Your job is to implement the complet
 - Code must compile/run without errors.
 - All plots saved to `images/` as PNG.
 - Program output captured as text AND as image screenshot.
-- Install any missing dependencies automatically.
+- Install any missing dependencies automatically — **inside the sandbox**.
+
+## Sandbox contract
+
+Every build, execution, package install, screenshot capture, and any other tool call (g++, cmake, python3, pip, xvfb-run, ImageMagick, etc.) MUST be invoked through the Daytona runtime:
+
+```bash
+forge exec -- bash -lc 'mkdir -p build && g++ -std=c++23 -Wall -Wextra -o build/main src/*.cpp'
+forge exec -- ./build/main
+forge exec -- python3 src/solve.py
+forge exec -- pip install numpy matplotlib --break-system-packages -q
+```
+
+Project files are uploaded before each `forge exec` and artifacts (binaries, plots, generated `.txt`/`.png`) are downloaded back automatically. Never call compilers, interpreters, or `pip` directly on the host.
 
 ## Refer to the coder and math skills for detailed guidelines.

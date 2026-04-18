@@ -34,23 +34,15 @@ If subject/lab info is missing, ask the user:
 - Lab type: `math`, `code`, or `mixed`
 - Programming language (if code/mixed) — default C++23
 
-## Step 2: Install Typst (if needed)
+## Step 2: Verify the sandbox runtime
 
-Check if `typst` is available:
-```bash
-command -v typst || which typst
-```
+All compilation, execution, and Typst happen inside a Daytona sandbox bound to this project. Make sure:
 
-If not found, install it:
-```bash
-wget -qO /tmp/typst.tar.xz https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz
-mkdir -p ~/.local/bin
-tar xf /tmp/typst.tar.xz --strip-components=1 -C ~/.local/bin
-export PATH="$HOME/.local/bin:$PATH"
-grep -q 'local/bin' ~/.bashrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-```
+- `uv` is installed on the host (the `forge` CLI uses it to run the runtime).
+- `DAYTONA_API_KEY` is exported in the shell or stored in the project's `.env` (gitignored). Optionally set `DAYTONA_API_URL`, `DAYTONA_TARGET`, `FORGE_DAYTONA_SNAPSHOT`, or `FORGE_DAYTONA_IMAGE`.
+- `forge status` runs without error.
 
-Verify: `typst --version`
+The sandbox auto-installs g++, cmake, python3, Typst and DejaVu fonts on first start. No host-side Typst install is required.
 
 ## Step 3: Create Project Structure
 
@@ -171,6 +163,8 @@ build/
 *.o
 *.exe
 /tmp/
+.env
+.forge/
 ```
 
 ## Step 8: Initialize Git
