@@ -17,7 +17,7 @@ You are setting up a new lab assignment project. Your goal is to create everythi
 
 Check if `~/.forge.yaml` exists.
 
-If it exists: read student and university data from it.
+If it exists: read student, university, and language data from it.
 If it does not exist: ask the user for:
 - Full name
 - Short name (initials + surname, e.g. "V.D. Pankov")
@@ -25,8 +25,22 @@ If it does not exist: ask the user for:
 - University name and short name
 - Department/faculty
 - City
+- Report language: `russian` or `english` — default `russian`
 
-Then save to `~/.forge.yaml` so it's never asked again.
+Then save to `~/.forge.yaml` so it's never asked again. The global config format:
+
+```yaml
+student:
+  name: "<full name>"
+  name_short: "<initials + surname>"
+  group: "<group>"
+university:
+  name: "<university full name>"
+  short: "<short name>"
+  department: "<department/faculty>"
+  city: "<city>"
+language: "<russian|english>"
+```
 
 Check if arguments were provided (`$ARGUMENTS`). Parse them for subject name and lab number.
 
@@ -38,7 +52,6 @@ If subject/lab info is missing, ask the user:
 - Variant number (0 if not applicable)
 - Lab type: `math`, `code`, or `mixed`
 - Programming language (if code/mixed) — default C++23
-- Report language: `russian` or `english` — default `russian`
 
 ## Step 2: Install Typst (if needed)
 
@@ -66,7 +79,7 @@ Create these directories and files:
 
 ## Step 4: Generate forge.yaml
 
-Write `forge.yaml` in the project root with all gathered data:
+Write `forge.yaml` in the project root with all gathered data. Fields like `student`, `university`, and `language` should be inherited from `~/.forge.yaml` if it exists:
 
 ```yaml
 student:
@@ -78,6 +91,7 @@ university:
   short: "<short name>"
   department: "<department/faculty>"
   city: "<city>"
+language: "<russian|english>"
 subject:
   name: "<subject>"
   teacher: "<teacher initials + surname>"

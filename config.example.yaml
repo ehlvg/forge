@@ -1,10 +1,30 @@
 # Forge Framework Configuration
-# Global config: ~/.forge.yaml (student + university, shared across all labs)
-# Project config: ./forge.yaml (inherits global, adds subject + lab details)
+# ──────────────────────────────────────────────
+# Global config: ~/.forge.yaml
+#   Stores student, university, and language preferences.
+#   These values are saved once and reused across all labs.
+#   During /init, Forge reads this file and skips asking again.
+#
+# Project config: ./forge.yaml
+#   Inherits global values and adds subject + lab details.
+# ──────────────────────────────────────────────
 
+# ── ~/.forge.yaml (global, saved once) ────────
+# student:
+#   name: "Ivanov Ivan Ivanovich"
+#   name_short: "I.I. Ivanov"     # initials + surname (for title page)
+#   group: "IU7-43B"
+# university:
+#   name: "Bauman Moscow State Technical University"
+#   short: "MSTU"
+#   department: "Department # "   # faculty/department
+#   city: "Moscow"
+# language: "russian"             # report language: "russian" or "english"
+
+# ── ./forge.yaml (per-project) ────────────────
 student:
   name: "Ivanov Ivan Ivanovich"
-  name_short: "I.I. Ivanov"   # initials + surname (for title page)
+  name_short: "I.I. Ivanov"     # initials + surname (for title page)
   group: "IU7-43B"
 
 university:
