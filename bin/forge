@@ -21,8 +21,8 @@ Usage:
 Commands:
   init   Open OpenCode in the target directory with `/init` preloaded.
   sync   Refresh Forge-managed files in an existing project.
-         Updates docs/template.typ, docs/titlepage.typ, and reference templates.
-         Use --language to select template language (default: english).
+         Updates docs/template.typ and docs/titlepage.typ.
+         Language resolved from: --language flag > ./forge.yaml > ~/.forge.yaml > english.
   help   Show this help.
 
 Examples:
@@ -83,16 +83,23 @@ init_project() {
   exec opencode "$dst_root" --prompt "/init"
 }
 
+read_global_language() {
+  local global_cfg="${HOME}/.forge.yaml"
+  if [ -f "$global_cfg" ]; then
+    sed -n '/^language:/s/^language:[[:space:]]*//p' "$global_cfg" | tr -d '"' | tr -d "'"
+  fi
+}
+
 sync_project() {
   local dst_root
-  local lang="english"
+  local lang=""
 
   # Parse arguments
   while [ $# -gt 0 ]; do
     case "$1" in
       --language)
         shift || true
-        lang="${1:-english}"
+        lang="${1:-}"
         shift || true
         ;;
       *)
@@ -103,6 +110,18 @@ sync_project() {
   done
 
   : "${dst_root:=$(target_dir ".")}"
+
+  # Resolve language: CLI flag > local forge.yaml > global ~/.forge.yaml > english
+  if [ -z "$lang" ]; then
+    if [ -f "$dst_root/forge.yaml" ]; then
+      lang="$(sed -n '/^language:/s/^language:[[:space:]]*//p' "$dst_root/forge.yaml" | tr -d '"' | tr -d "'")"
+    fi
+    if [ -z "$lang" ]; then
+      lang="$(read_global_language)"
+    fi
+    : "${lang:=english}"
+  fi
+
   mkdir -p "$dst_root/docs"
 
   case "$lang" in
